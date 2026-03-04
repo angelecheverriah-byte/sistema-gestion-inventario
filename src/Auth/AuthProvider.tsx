@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import type { AuthResponse, User } from "../Types/types";
-import { APi_URL } from "./ApiURL";
+import { API_URL } from "../Auth/ApiURL";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -32,7 +32,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   async function checkAuth() {
     try {
-      const response = await fetch(`${APi_URL}/refresh-token`, {
+      const response = await fetch(`${API_URL}/refresh-token`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -61,7 +61,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   async function signOut() {
     try {
-      const response = await fetch(`${APi_URL}/signout`, {
+      const response = await fetch(`${API_URL}/signout`, {
         method: "DELETE",
         credentials: "include",
       });

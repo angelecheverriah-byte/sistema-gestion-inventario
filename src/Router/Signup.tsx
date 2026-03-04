@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DefaultLayout from "../Layout/DefaultLayout";
 import { useAuth } from "../Auth/AuthProvider";
 import { Navigate, useNavigate } from "react-router-dom";
-import { APi_URL } from "../Auth/ApiURL";
+import { API_URL } from "../Auth/ApiURL";
 import type { AuthResponseError } from "../Types/types";
 
 function Signup() {
@@ -18,7 +18,7 @@ function Signup() {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${APi_URL}/signup`, {
+      const response = await fetch(`${API_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

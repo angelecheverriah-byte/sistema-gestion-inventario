@@ -3,6 +3,19 @@ const jwt = require("jsonwebtoken");
 const { jsonResponse } = require("../conexion/jsonResponse");
 const { generateAccessToken } = require("../libs/generateTokens");
 
+/**
+ * @swagger
+ * /api/refresh-token:
+ *   get:
+ *     summary: Renovar token
+ *     tags:
+ *       - Autenticación
+ *     responses:
+ *       200:
+ *         description: Nuevo token
+ *       401:
+ *         description: Token inválido
+ */
 router.get("/", async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 

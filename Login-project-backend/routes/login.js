@@ -7,6 +7,33 @@ const {
 } = require("../libs/generateTokens");
 const bcrypt = require("bcrypt");
 
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     summary: Login de usuario
+ *     tags:
+ *       - Autenticación
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Éxito
+ *       401:
+ *         description: Error
+ */
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
 
@@ -31,8 +58,6 @@ router.post("/", async (req, res) => {
   const correctPassword = await bcrypt.compare(password, user.password);
 
   if (correctPassword) {
-    //autenticar usuario
-
     const userPayload = {
       id: user.id,
       username: user.username,
@@ -42,10 +67,10 @@ router.post("/", async (req, res) => {
     const refreshToken = generateRefreshToken(userPayload);
 
     res.cookie("refreshToken", refreshToken, {
-      httpOnly: true, // Seguridad: JS no puede leerla
-      secure: false, // false para desarrollo (http), true para producción (https)
-      sameSite: "Lax", // Permite que la cookie se guarde en navegadores modernos
-      maxAge: 30 * 60 * 1000, // Expira en 7 días
+      httpOnly: true,
+      secure: false,
+      sameSite: "Lax",
+      maxAge: 30 * 60 * 1000,
     });
 
     res.status(200).json(jsonResponse(200, { user: userPayload, accessToken }));
