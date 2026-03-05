@@ -30,9 +30,6 @@ async function setupDatabase() {
       )
     `);
 
-    await connection.query("DROP TABLE IF EXISTS productos");
-    console.log("🗑️ Tabla antigua eliminada.");
-
     await connection.query(`
         CREATE TABLE IF NOT EXISTS productos (
             id INT AUTO_INCREMENT PRIMARY KEY,
