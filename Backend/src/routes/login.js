@@ -1,10 +1,10 @@
-const { jsonResponse } = require("../src/conexion/jsonResponse");
-const db = require("../src/conexion/dataBase");
+const { jsonResponse } = require("../conexion/jsonResponse");
+const db = require("../conexion/dataBase");
 const router = require("express").Router();
 const {
   generateAccessToken,
   generateRefreshToken,
-} = require("../src/conexion/libs/generateTokens");
+} = require("../libs/generateTokens");
 const bcrypt = require("bcrypt");
 
 /**

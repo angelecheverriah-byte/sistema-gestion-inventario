@@ -6,7 +6,7 @@ import { useConfig } from "../Context/ConfigContext";
 interface Producto {
   id: number;
   nombre: string;
-  precio: number;
+  precio_usd: number;
   cantidad: number;
 }
 
@@ -26,7 +26,7 @@ export const SalesModal: React.FC<Props> = ({
   const [cantidadVenta, setCantidadVenta] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const totalUSD = producto.precio * cantidadVenta;
+  const totalUSD = producto.precio_usd * cantidadVenta;
 
   const handleConfirmarVenta = async () => {
     if (cantidadVenta > producto.cantidad)
@@ -44,7 +44,7 @@ export const SalesModal: React.FC<Props> = ({
         body: JSON.stringify({
           producto_id: producto.id,
           cantidad: cantidadVenta,
-          precio_unitario: producto.precio,
+          precio_unitario: producto.precio_usd,
           total: totalUSD,
         }),
       });

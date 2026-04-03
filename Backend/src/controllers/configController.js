@@ -1,4 +1,4 @@
-const pool = require("../conexion/db");
+const pool = require("../conexion/dataBase");
 
 // Obtener la tasa guardada en la DB
 exports.getTasa = async (req, res) => {

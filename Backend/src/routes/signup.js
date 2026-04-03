@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
-const db = require("../src/conexion/dataBase");
-const { jsonResponse } = require("../src/conexion/jsonResponse");
+const db = require("../conexion/dataBase");
+const { jsonResponse } = require("../conexion/jsonResponse");
 const router = require("express").Router();
 
 /**

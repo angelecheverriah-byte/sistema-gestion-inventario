@@ -1,4 +1,4 @@
-const { jsonResponse } = require("../src/conexion/jsonResponse");
+const { jsonResponse } = require("../conexion/jsonResponse");
 
 function isAdmin(req, res, next) {
   if (req.user && req.user.role === "ADMIN") {

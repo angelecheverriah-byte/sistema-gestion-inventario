@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
-const { jsonResponse } = require("../src/conexion/jsonResponse");
-const { generateAccessToken } = require("../src/conexion/libs/generateTokens");
+const { jsonResponse } = require("../conexion/jsonResponse");
+const { generateAccessToken } = require("../libs/generateTokens");
 
 /**
  * @swagger

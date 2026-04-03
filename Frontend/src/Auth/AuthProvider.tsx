@@ -14,7 +14,7 @@ interface AuthProviderProps {
 
 const AuthContext = createContext({
   isAuthenticated: false,
-  getAccessToken: () => {},
+  getAccessToken: () => "" as string,
   saveUser: (_userData: AuthResponse) => {},
   user: null as User | null,
   signOut: () => {},
@@ -49,7 +49,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  function getAccessToken() {
+  function getAccessToken(): string {
     return accessToken;
   }
 

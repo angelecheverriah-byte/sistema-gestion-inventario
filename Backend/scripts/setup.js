@@ -47,6 +47,7 @@ async function setupDatabase() {
         cantidad INT NOT NULL,
         total_usd DECIMAL(10, 2) NOT NULL,
         tasa_bs DECIMAL(10, 2) NOT NULL,
+        total_bs DECIMAL(10, 2) NOT NULL,
         fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (producto_id) REFERENCES productos(id)
       )

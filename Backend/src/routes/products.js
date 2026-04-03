@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const authenticate = require("../Middleware/authenticate");
+const authenticate = require("../middleware/authenticate");
 const db = require("../conexion/dataBase");
-const isAdmin = require("../Middleware/isAdmin");
+const isAdmin = require("../middleware/isAdmin");
 const { jsonResponse } = require("../conexion/jsonResponse");
 
 /**

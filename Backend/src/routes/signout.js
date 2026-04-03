@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { jsonResponse } = require("../src/conexion/jsonResponse");
+const { jsonResponse } = require("../conexion/jsonResponse");
 
 /**
  * @swagger

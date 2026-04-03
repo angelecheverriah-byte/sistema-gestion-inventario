@@ -1,5 +1,5 @@
 const axios = require("axios");
-const db = require("../conexion/db");
+const db = require("../conexion/dataBase");
 
 const syncTasaBCV = async () => {
   try {

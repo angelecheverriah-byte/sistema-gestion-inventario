@@ -75,13 +75,25 @@ cron.schedule("0 9 * * 1-5", () => {
   syncTasaBCV();
 });
 
-// Ejecutar una vez al iniciar el servidor para tener la tasa fresca
-syncTasaBCV();
-
 app.get("/", (req, res) => {
   res.send("Server Status: Online 🚀");
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port: ${port}`);
+  console.log(`✅ Server is running on port: ${port}`);
+
+  // Ejecutar sincronización inicial sin bloquear el inicio del servidor
+  // Esperamos 3 segundos para que la DB en Docker termine de estabilizarse
+  setTimeout(async () => {
+    try {
+      console.log("🔄 Intentando sincronización de tasa inicial...");
+      await syncTasaBCV();
+      console.log("✨ Tasa sincronizada exitosamente.");
+    } catch (error) {
+      console.error(
+        "⚠️ No se pudo sincronizar la tasa inicial (posible falta de internet):",
+        error.message,
+      );
+    }
+  }, 3000);
 });

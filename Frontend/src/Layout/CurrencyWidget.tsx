@@ -1,34 +1,26 @@
-import { useConfig } from "../Context/ConfigContext"; // Ajusta la ruta si es necesario
+import { useConfig } from "../Context/ConfigContext";
 
-export const CurrencyWidget: React.FC = () => {
-  const { tasa, loading } = useConfig();
+export function CurrencyWidget() {
+  const { tasa } = useConfig();
 
-  // Mientras carga la tasa del Backend/BCV
-  if (loading) {
-    return (
-      <div className="flex items-center gap-2 text-gray-400 text-sm italic">
-        Cargando tasa...
-      </div>
-    );
-  }
-
-  // Si no hay tasa o es cero (por error o configuración inicial)
-  if (!tasa) {
-    return (
-      <div className="flex items-center gap-2 bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold">
-        ⚠️ Tasa no configurada
-      </div>
-    );
-  }
+  // 1. Verificamos si la tasa existe y es un número antes de usar .toFixed()
+  const tasaNumerica = typeof tasa === "number" ? tasa : parseFloat(tasa);
+  const tasaValida = !isNaN(tasaNumerica) ? tasaNumerica : 0;
 
   return (
-    <div className="flex items-center gap-2.5 bg-green-100 text-green-900 px-4 py-1.5 rounded-full text-sm font-extrabold shadow-sm border border-green-200">
-      {/* Pequeño punto verde titilando (Efecto "En vivo") */}
-      <span className="relative flex h-2.5 w-2.5">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-600"></span>
-      </span>
-      BCV: <span className="font-bold">{tasa.toFixed(2)}</span> Bs/$
+    <div className="flex items-center gap-2 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100 transition-all hover:bg-emerald-100">
+      <div className="flex flex-col">
+        <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-tighter leading-none">
+          Tasa BCV
+        </span>
+        <span className="text-sm font-black text-emerald-700 leading-tight">
+          {/* Si la tasa no ha cargado, mostramos un guión en lugar de romper la app */}
+          {tasaValida > 0 ? `Bs. ${tasaValida.toFixed(2)}` : "Cargando..."}
+        </span>
+      </div>
+
+      {/* Un pequeño indicador visual de "En vivo" */}
+      <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
     </div>
   );
-};
+}

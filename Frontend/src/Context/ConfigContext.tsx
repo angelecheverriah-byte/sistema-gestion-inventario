@@ -28,10 +28,15 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({
   // Función global para formatear precios de USD a Bs
   const formatBs = (usd: number) => {
     const total = usd * tasa;
-    return new Intl.NumberFormat("es-VE", {
-      style: "currency",
-      currency: "VED",
+
+    // Usamos el estilo "es-VE" para que ponga los puntos de mil y comas decimales
+    // pero manejamos el símbolo "Bs." manualmente para evitar el "VED"
+    const numeroFormateado = new Intl.NumberFormat("es-VE", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     }).format(total);
+
+    return `Bs. ${numeroFormateado}`;
   };
 
   return (

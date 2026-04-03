@@ -2,15 +2,32 @@ const express = require("express");
 const router = express.Router();
 const configController = require("../controllers/configController");
 
-// Importamos tus middlewares
-const authenticate = require("../Middleware/authenticate"); // Asegúrate de que la ruta sea correcta
-const isAdmin = require("../Middleware/isAdmin");
+// 1. Importamos sin desestructurar para inspeccionar el objeto
+const authModule = require("../middleware/authenticate");
+const adminModule = require("../middleware/isAdmin");
 
-// PÚBLICO: El frontend necesita esto para mostrar los precios en Bs.
+// 2. Diagnóstico manual (Saldrá en tus logs de Docker)
+console.log("--- CHEQUEO DE MÓDULOS ---");
+console.log("Tipo de authModule:", typeof authModule);
+console.log("Contenido de authModule:", authModule);
+console.log("Tipo de adminModule:", typeof adminModule);
+console.log("--- FIN DEL CHEQUEO ---");
+
+// 3. Asignación segura
+const authenticate =
+  typeof authModule === "function" ? authModule : authModule.authenticate;
+const isAdmin =
+  typeof adminModule === "function" ? adminModule : adminModule.isAdmin;
+
 router.get("/tasa", configController.getTasa);
 
-// PROTEGIDO: Solo el Admin puede actualizar la tasa manualmente
-// Primero autenticamos (JWT) y luego verificamos si es Admin
-router.put("/tasa", authenticate, isAdmin, configController.updateTasa);
+// 4. Protección de ruta
+if (typeof authenticate === "function" && typeof isAdmin === "function") {
+  router.put("/tasa", authenticate, isAdmin, configController.updateTasa);
+} else {
+  console.error(
+    "❌ ERROR: No se pudo cargar una de las funciones de middleware.",
+  );
+}
 
 module.exports = router;
