@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../Auth/AuthProvider";
 import { API_URL } from "../Auth/ApiURL";
 import { useConfig } from "../Context/ConfigContext";
+import { dbLocal, type OfflineVenta } from "./dbLocal";
 
 interface Producto {
   id: number;
@@ -22,11 +23,12 @@ export const SalesModal: React.FC<Props> = ({
   onSuccess,
 }) => {
   const { getAccessToken } = useAuth();
-  const { formatBs } = useConfig();
+  const { formatBs, tasa } = useConfig(); // Extraemos tasa para el cálculo de bolívares
   const [cantidadVenta, setCantidadVenta] = useState(1);
   const [loading, setLoading] = useState(false);
 
   const totalUSD = producto.precio_usd * cantidadVenta;
+  const totalBS = totalUSD * tasa;
 
   const handleConfirmarVenta = async () => {
     if (cantidadVenta > producto.cantidad)
@@ -34,6 +36,18 @@ export const SalesModal: React.FC<Props> = ({
     if (cantidadVenta <= 0) return alert("Cantidad no válida");
 
     setLoading(true);
+
+    // Creamos el objeto siguiendo la interfaz OfflineVenta de tu dbLocal
+    const ventaData: OfflineVenta = {
+      producto_id: producto.id,
+      nombre_producto: producto.nombre,
+      cantidad: cantidadVenta,
+      total_usd: totalUSD,
+      total_bs: totalBS,
+      fecha: new Date().toISOString(),
+      sincronizado: 0,
+    };
+
     try {
       const response = await fetch(`${API_URL}/sales`, {
         method: "POST",
@@ -42,10 +56,10 @@ export const SalesModal: React.FC<Props> = ({
           Authorization: `Bearer ${getAccessToken()}`,
         },
         body: JSON.stringify({
-          producto_id: producto.id,
-          cantidad: cantidadVenta,
+          producto_id: ventaData.producto_id,
+          cantidad: ventaData.cantidad,
           precio_unitario: producto.precio_usd,
-          total: totalUSD,
+          total: ventaData.total_usd,
         }),
       });
 
@@ -56,8 +70,20 @@ export const SalesModal: React.FC<Props> = ({
         alert(err.message || "Error al procesar la venta");
       }
     } catch (error) {
-      console.error(error);
-      alert("Error de conexión");
+      console.error("Error de conexión, guardando localmente:", error);
+      try {
+        // Guardamos en IndexedDB usando la instancia que creaste
+        await dbLocal.ventasOffline.add(ventaData);
+
+        alert(
+          `📶 Sin conexión: Venta guardada localmente (${formatBs(totalUSD)}). Se sincronizará automáticamente al recuperar internet.`,
+        );
+
+        onSuccess();
+      } catch (dbError) {
+        console.error("Error guardando en IndexedDB:", dbError);
+        alert("Error crítico: No se pudo guardar la venta localmente.");
+      }
     } finally {
       setLoading(false);
     }
@@ -93,7 +119,9 @@ export const SalesModal: React.FC<Props> = ({
                 Stock
               </p>
               <p
-                className={`text-sm font-bold ${producto.cantidad < 5 ? "text-rose-500" : "text-slate-600"}`}
+                className={`text-sm font-bold ${
+                  producto.cantidad < 5 ? "text-rose-500" : "text-slate-600"
+                }`}
               >
                 {producto.cantidad} disponibles
               </p>

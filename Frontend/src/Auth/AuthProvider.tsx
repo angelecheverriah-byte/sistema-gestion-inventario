@@ -7,6 +7,7 @@ import {
 } from "react";
 import type { AuthResponse, User } from "../Types/types";
 import { API_URL } from "../Auth/ApiURL";
+import { useSync } from "../Hooks/useSync";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -25,6 +26,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [accessToken, setAccessToken] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  useSync(isAuthenticated);
 
   useEffect(() => {
     checkAuth();

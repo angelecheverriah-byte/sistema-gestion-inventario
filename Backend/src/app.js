@@ -70,7 +70,7 @@ app.use("/api/refresh-token", require("./routes/refreshToken"));
 app.use("/api/products", require("./routes/products"));
 app.use("/api/config", require("./routes/config"));
 app.use("/api/sales", require("./routes/sales"));
-
+app.use("/api/reports", require("./routes/reports"));
 cron.schedule("0 9 * * 1-5", () => {
   syncTasaBCV();
 });

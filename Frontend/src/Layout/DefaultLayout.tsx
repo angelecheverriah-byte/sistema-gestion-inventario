@@ -12,11 +12,11 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
       <header className="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 px-8 flex items-center justify-between">
         <div className="flex items-center gap-2">
           {/* Un pequeño detalle visual para el logo */}
-          <div className="w-13 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
-            <span className="text-white font-black text-xs">SrPizza</span>
+          <div className="w-12 h-7 bg-slate-900 rounded-lg flex items-center justify-center">
+            <span className="text-white font-black text-xs">IP</span>
           </div>
           <span className="font-bold text-slate-900 tracking-tight">
-            Inventario
+            InventarioPro
           </span>
         </div>
 
