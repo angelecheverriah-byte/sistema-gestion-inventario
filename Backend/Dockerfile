@@ -2,15 +2,18 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copiamos solo los package para aprovechar el cache de capas de Docker
+# Copiamos archivos de dependencias
 COPY package*.json ./
 
+# Instalamos dependencias
 RUN npm install
 
-# Copiamos el resto del código (respetando el .gitignore)
+# Copiamos todo el contenido de la carpeta Backend al contenedor
 COPY . .
 
+# EXPOSE es informativo
 EXPOSE 3100
 
-# Ejecutamos el setup de las tablas antes de iniciar el servidor
-CMD node scripts/setup.js && npm start
+# IMPORTANTE: Usamos la ruta exacta que definiste en tu package.json
+# Primero corre el setup de la DB y luego arranca el servidor en src/app.js
+CMD ["sh", "-c", "node scripts/setup.js && node src/app.js"]
