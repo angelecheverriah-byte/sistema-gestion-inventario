@@ -11,8 +11,8 @@ require("dotenv").config();
 
 const port = process.env.PORT || 3100;
 
-const SERVER_URL = process.env.RAILWAY_STATIC_URL
-  ? `https://${process.env.RAILWAY_STATIC_URL}`
+const SERVER_URL = process.env.RENDER_EXTERNAL_URL
+  ? process.env.RENDER_EXTERNAL_URL
   : `http://localhost:${port}`;
 
 const swaggerOptions = {
@@ -79,7 +79,7 @@ app.get("/", (req, res) => {
   res.send("Server Status: Online 🚀");
 });
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`✅ Server is running on port: ${port}`);
 
   // Ejecutar sincronización inicial sin bloquear el inicio del servidor

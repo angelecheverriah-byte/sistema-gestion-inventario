@@ -50,7 +50,7 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
       {/* Footer minimalista */}
       <footer className="py-6 text-center">
         <p className="text-[10px] text-slate-400 font-medium uppercase tracking-[0.2em]">
-          Powered by Codiva Services &bull; 2026
+          Powered by Angel Echeverria FullStack Developer &bull; 2026
         </p>
       </footer>
     </div>
