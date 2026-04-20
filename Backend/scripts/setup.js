@@ -7,9 +7,14 @@ async function setupDatabase() {
     host: process.env.DB_HOST || "mysql-db",
     user: process.env.DB_USER || "user_dev",
     password: process.env.DB_PASSWORD || "password_dev",
+    port: process.env.DB_PORT,
+    ssl: {
+      rejectUnauthorized: false, // <-- AGREGADO: Necesario para conexiones seguras en la nube
+    },
   });
 
   try {
+    console.log("🛠️ Conectando a Aiven e iniciando configuración...");
     console.log("🛠️ Iniciando configuración profesional...");
 
     await connection.query(
