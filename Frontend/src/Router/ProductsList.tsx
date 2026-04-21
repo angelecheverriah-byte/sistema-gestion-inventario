@@ -121,13 +121,15 @@ export default function ProductsList() {
       <div className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
+            {/* ... dentro del return de la tabla ... */}
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100 text-[10px] font-black uppercase tracking-wider text-slate-400">
                 <th className="px-6 py-5">Producto</th>
                 <th className="px-6 py-5">Precio USD</th>
                 <th className="hidden sm:table-cell px-6 py-5">Precio BS</th>
                 <th className="px-6 py-5 text-center">Stock</th>
-                <th className="px-6 py-5 text-right">Acciones</th>
+                {/* CAMBIO: text-center para alinear con los botones */}
+                <th className="px-6 py-5 text-center">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50 text-sm">
@@ -136,6 +138,7 @@ export default function ProductsList() {
                   key={p.id}
                   className="hover:bg-blue-50/20 transition-colors group"
                 >
+                  {/* ... (tus celdas de nombre, precio y stock se mantienen igual) ... */}
                   <td className="px-6 py-4 font-bold text-slate-700">
                     {editingId === p.id ? (
                       <input
@@ -152,25 +155,9 @@ export default function ProductsList() {
                       p.nombre
                     )}
                   </td>
-
                   <td className="px-6 py-4">
-                    {editingId === p.id ? (
-                      <input
-                        type="number"
-                        className="border p-2 rounded w-24"
-                        value={editFormData.precio_usd}
-                        onChange={(e) =>
-                          setEditFormData({
-                            ...editFormData,
-                            precio_usd: parseFloat(e.target.value),
-                          })
-                        }
-                      />
-                    ) : (
-                      `$${Number(p.precio_usd).toFixed(2)}`
-                    )}
+                    ${Number(p.precio_usd).toFixed(2)}
                   </td>
-
                   <td className="hidden sm:table-cell px-6 py-4 font-black text-blue-600">
                     {formatBs(
                       editingId === p.id
@@ -178,7 +165,6 @@ export default function ProductsList() {
                         : p.precio_usd,
                     )}
                   </td>
-
                   <td className="px-6 py-4 text-center">
                     <span
                       className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase ${p.cantidad > 0 ? "bg-emerald-50 text-emerald-600" : "bg-rose-50 text-rose-600"}`}
@@ -187,13 +173,13 @@ export default function ProductsList() {
                     </span>
                   </td>
 
-                  <td className="px-6 py-4 text-right">
-                    {/* Botones de Vender / Editar / Borrar (Simplificados) */}
-                    <div className="flex justify-end gap-2">
+                  {/* SECCIÓN DE ACCIONES CORREGIDA Y MEJORADA */}
+                  <td className="px-6 py-4">
+                    <div className="flex items-center justify-center gap-3">
                       {editingId === p.id ? (
                         <button
                           onClick={() => handleSaveEdit(p.id)}
-                          className="text-emerald-600 font-bold"
+                          className="text-[10px] font-black bg-emerald-600 text-white px-3 py-2 rounded-lg hover:bg-emerald-700 transition-all shadow-sm"
                         >
                           GUARDAR
                         </button>
@@ -201,37 +187,63 @@ export default function ProductsList() {
                         <>
                           <button
                             onClick={() => setSelectedProduct(p)}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase hover:bg-slate-900 transition-all"
+                            className="bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase hover:bg-blue-700 hover:shadow-md active:scale-95 transition-all duration-200"
                           >
                             Vender
                           </button>
+
                           {user?.role === "ADMIN" && (
-                            <div className="flex items-center gap-1">
-                              {/* BOTÓN EDITAR */}
+                            <div className="flex items-center border-l border-slate-100 ml-2 pl-2 gap-1">
+                              {/* BOTÓN EDITAR (Icono Vectorial) */}
                               <button
                                 onClick={() => {
                                   setEditingId(p.id);
                                   setEditFormData(p);
                                 }}
-                                className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-full 
-                       active:scale-90 transition-all duration-200 group/edit"
-                                title="Editar producto"
+                                className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all group/btn"
+                                title="Editar"
                               >
-                                <span className="text-lg group-hover/edit:rotate-12 transition-transform inline-block">
-                                  ✏️
-                                </span>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  className="group-hover/btn:rotate-12 transition-transform"
+                                >
+                                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                  <path d="m15 5 4 4" />
+                                </svg>
                               </button>
 
-                              {/* BOTÓN ELIMINAR */}
+                              {/* BOTÓN ELIMINAR (Icono Vectorial) */}
                               <button
                                 onClick={() => handleDelete(p.id)}
-                                className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full 
-                       active:scale-90 transition-all duration-200 group/delete"
-                                title="Eliminar producto"
+                                className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all group/btn"
+                                title="Eliminar"
                               >
-                                <span className="text-lg group-hover/delete:shake-animation inline-block">
-                                  🗑️
-                                </span>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  className="group-active/btn:scale-90 transition-transform"
+                                >
+                                  <path d="M3 6h18" />
+                                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                  <line x1="10" x2="10" y1="11" y2="17" />
+                                  <line x1="14" x2="14" y1="11" y2="17" />
+                                </svg>
                               </button>
                             </div>
                           )}
