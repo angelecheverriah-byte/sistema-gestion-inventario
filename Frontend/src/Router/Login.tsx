@@ -1,18 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DefaultLayout from "../Layout/DefaultLayout";
 import { useAuth } from "../Auth/AuthProvider";
 import { Navigate, useNavigate } from "react-router-dom";
 import { API_URL } from "../Auth/ApiURL";
 import type { AuthResponse, AuthResponseError } from "../Types/types";
+import LoadingScreen from "../Components/LoadingScreen";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorResponse, setErrorResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false); // Estado para feedback visual
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   const Auth = useAuth();
   const goto = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsInitialLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Función genérica para el login que podemos reutilizar
   async function performLogin(u: string, p: string) {
@@ -64,6 +71,11 @@ function Login() {
       await performLogin(creds.u, creds.p);
     }, 500);
   };
+
+  // Si está cargando, mostramos el componente elegante
+  if (isInitialLoading) {
+    return <LoadingScreen />;
+  }
 
   if (Auth.isAuthenticated) {
     return <Navigate to="/Dashboard" />;
