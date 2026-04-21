@@ -77,9 +77,6 @@ function Login() {
             <h1 className="text-3xl font-black text-slate-900 tracking-tight">
               Bienvenido
             </h1>
-            <p className="text-slate-400 text-sm">
-              Prueba el sistema con un solo clic
-            </p>
           </div>
 
           {/* BOTONES DE ACCESO RÁPIDO PARA RECLUTADORES */}
