@@ -112,19 +112,17 @@ export default function ProductsList() {
       {/* TABLA: AQUÍ ESTÁ EL AJUSTE DE CENTRADO */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden w-full">
         <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse">
+          <table className="w-full table-fixed border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100 text-[10px] font-black uppercase tracking-wider text-slate-400">
-                <th className="px-6 py-5 text-left">Producto</th>
-                <th className="px-6 py-5 text-left">Precio USD</th>
-                <th className="hidden sm:table-cell px-6 py-5 text-left">
+                <th className="px-6 py-5 text-left w-[30%]">Producto</th>
+                <th className="px-6 py-5 text-left w-[15%]">Precio USD</th>
+                <th className="hidden sm:table-cell px-6 py-5 text-left w-[20%]">
                   Precio BS
                 </th>
-                <th className="px-6 py-5 text-center">Stock</th>
+                <th className="px-6 py-5 text-center w-[15%]">Stock</th>
                 {/* Agregamos un ancho mínimo para que no baile */}
-                <th className="px-6 py-5 text-center min-w-[180px]">
-                  Acciones
-                </th>
+                <th className="px-6 py-5 text-center w-[20%]">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50 text-sm">
@@ -251,6 +249,11 @@ export default function ProductsList() {
         <div className="border-t border-slate-100 bg-slate-50/30">
           <TablePagination
             component="div"
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end", // Alinea los controles a la derecha pero el contenedor ocupa todo el ancho
+            }}
             count={total}
             page={page}
             onPageChange={(_, newPage) => setPage(newPage)}
