@@ -86,7 +86,7 @@ export default function PortalLayout({
 
       {/* Footer */}
       <footer className="py-4 text-center text-xs text-gray-400 border-t border-gray-100">
-        &copy; 2026 Codiva Services - Sistema de Inventario
+        &copy; Angel Echeverria Developer FullStack - Sistema de Inventario
       </footer>
     </div>
   );

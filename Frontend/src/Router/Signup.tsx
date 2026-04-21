@@ -56,7 +56,7 @@ function Signup() {
               Crear Cuenta
             </h1>
             <p className="text-slate-400 text-sm font-medium">
-              Únete a Codiva Services
+              Únete y gestiona tu inventario como un Pro
             </p>
           </div>
 
