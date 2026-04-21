@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import TablePagination from "@mui/material/TablePagination";
 import { useAuth } from "../Auth/AuthProvider";
 import { useConfig } from "../Context/ConfigContext";
