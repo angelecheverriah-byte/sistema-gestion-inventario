@@ -70,15 +70,13 @@ export default function ProductsList() {
 
   return (
     <div className="space-y-6 p-2 md:p-0 animate-in fade-in duration-500">
-      {/* CABECERA Y BUSCADOR */}
+      {/* CABECERA Y BUSCADOR (Sin cambios) */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <h2 className="text-xl font-bold text-slate-800">
           Gestión de Inventario
         </h2>
 
-        {/* CONTENEDOR DEL BUSCADOR */}
         <div className="relative w-full md:w-80 group">
-          {/* Icono de Lupa con SVG para mayor nitidez y control */}
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <svg
               className="h-5 w-5 text-slate-400 group-focus-within:text-blue-500 transition-colors"
@@ -95,16 +93,10 @@ export default function ProductsList() {
               />
             </svg>
           </div>
-
-          {/* Input Estilizado */}
           <input
             type="text"
             placeholder="Buscar por nombre..."
-            className="block w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 rounded-2xl 
-               text-sm font-medium text-slate-700 placeholder-slate-400
-               shadow-sm shadow-slate-100
-               focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 
-               transition-all duration-200"
+            className="block w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 rounded-2xl text-sm font-medium text-slate-700 placeholder-slate-400 shadow-sm shadow-slate-100 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all duration-200"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -117,19 +109,22 @@ export default function ProductsList() {
         </div>
       )}
 
-      {/* TABLA */}
-      <div className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden">
+      {/* TABLA: AQUÍ ESTÁ EL AJUSTE DE CENTRADO */}
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden w-full">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            {/* ... dentro del return de la tabla ... */}
+          <table className="w-full table-auto border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100 text-[10px] font-black uppercase tracking-wider text-slate-400">
-                <th className="px-6 py-5">Producto</th>
-                <th className="px-6 py-5">Precio USD</th>
-                <th className="hidden sm:table-cell px-6 py-5">Precio BS</th>
+                <th className="px-6 py-5 text-left">Producto</th>
+                <th className="px-6 py-5 text-left">Precio USD</th>
+                <th className="hidden sm:table-cell px-6 py-5 text-left">
+                  Precio BS
+                </th>
                 <th className="px-6 py-5 text-center">Stock</th>
-                {/* CAMBIO: text-center para alinear con los botones */}
-                <th className="px-6 py-5 text-center">Acciones</th>
+                {/* Agregamos un ancho mínimo para que no baile */}
+                <th className="px-6 py-5 text-center min-w-[180px]">
+                  Acciones
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50 text-sm">
@@ -138,11 +133,11 @@ export default function ProductsList() {
                   key={p.id}
                   className="hover:bg-blue-50/20 transition-colors group"
                 >
-                  {/* ... (tus celdas de nombre, precio y stock se mantienen igual) ... */}
                   <td className="px-6 py-4 font-bold text-slate-700">
+                    {/* ... nombre ... */}
                     {editingId === p.id ? (
                       <input
-                        className="border p-2 rounded w-full"
+                        className="border p-1 rounded w-full"
                         value={editFormData.nombre}
                         onChange={(e) =>
                           setEditFormData({
@@ -173,13 +168,13 @@ export default function ProductsList() {
                     </span>
                   </td>
 
-                  {/* SECCIÓN DE ACCIONES CORREGIDA Y MEJORADA */}
+                  {/* CELDA DE ACCIONES CENTRADA */}
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-center gap-3">
                       {editingId === p.id ? (
                         <button
                           onClick={() => handleSaveEdit(p.id)}
-                          className="text-[10px] font-black bg-emerald-600 text-white px-3 py-2 rounded-lg hover:bg-emerald-700 transition-all shadow-sm"
+                          className="text-[10px] font-black bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-all shadow-sm"
                         >
                           GUARDAR
                         </button>
@@ -193,15 +188,13 @@ export default function ProductsList() {
                           </button>
 
                           {user?.role === "ADMIN" && (
-                            <div className="flex items-center border-l border-slate-100 ml-2 pl-2 gap-1">
-                              {/* BOTÓN EDITAR (Icono Vectorial) */}
+                            <div className="flex items-center border-l border-slate-200 ml-2 pl-2 gap-1">
                               <button
                                 onClick={() => {
                                   setEditingId(p.id);
                                   setEditFormData(p);
                                 }}
                                 className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all group/btn"
-                                title="Editar"
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -219,12 +212,9 @@ export default function ProductsList() {
                                   <path d="m15 5 4 4" />
                                 </svg>
                               </button>
-
-                              {/* BOTÓN ELIMINAR (Icono Vectorial) */}
                               <button
                                 onClick={() => handleDelete(p.id)}
                                 className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all group/btn"
-                                title="Eliminar"
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -257,18 +247,21 @@ export default function ProductsList() {
           </table>
         </div>
 
-        <TablePagination
-          component="div"
-          count={total}
-          page={page}
-          onPageChange={(_, newPage) => setPage(newPage)}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={(e) =>
-            setRowsPerPage(parseInt(e.target.value, 10))
-          }
-          rowsPerPageOptions={[5, 10]}
-          labelRowsPerPage="Filas:"
-        />
+        {/* PAGINACIÓN CON BORDE SUPERIOR PARA CERRAR EL DISEÑO */}
+        <div className="border-t border-slate-100 bg-slate-50/30">
+          <TablePagination
+            component="div"
+            count={total}
+            page={page}
+            onPageChange={(_, newPage) => setPage(newPage)}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={(e) =>
+              setRowsPerPage(parseInt(e.target.value, 10))
+            }
+            rowsPerPageOptions={[5, 10]}
+            labelRowsPerPage="Filas:"
+          />
+        </div>
       </div>
 
       {selectedProduct && (
