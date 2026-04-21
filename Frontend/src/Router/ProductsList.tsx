@@ -206,15 +206,25 @@ export default function ProductsList() {
                             Vender
                           </button>
                           {user?.role === "ADMIN" && (
-                            <button
-                              onClick={() => {
-                                setEditingId(p.id);
-                                setEditFormData(p);
-                              }}
-                              className="p-2 text-slate-400 hover:text-blue-600"
-                            >
-                              ✏️
-                            </button>
+                            <>
+                              <button
+                                onClick={() => {
+                                  setEditingId(p.id);
+                                  setEditFormData(p);
+                                }}
+                                className="p-2 text-slate-400 hover:text-blue-600"
+                              >
+                                ✏️
+                              </button>
+
+                              <button
+                                onClick={() => handleDelete(p.id)}
+                                className="p-2 text-slate-400 hover:text-rose-600"
+                                title="Eliminar"
+                              >
+                                🗑️
+                              </button>
+                            </>
                           )}
                         </>
                       )}
