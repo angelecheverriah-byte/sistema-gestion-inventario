@@ -29,10 +29,12 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: SERVER_URL,
-        description: process.env.RAILWAY_STATIC_URL
-          ? "Servidor Producción"
-          : "Servidor Local",
+        url:
+          process.env.RENDER_EXTERNAL_URL ||
+          "https://sistema-inventario-backend-cwmm.onrender.com",
+        description: process.env.RENDER_EXTERNAL_URL
+          ? "Servidor Producción (Render)"
+          : "Servidor Local (Desarrollo)",
       },
     ],
     components: {
