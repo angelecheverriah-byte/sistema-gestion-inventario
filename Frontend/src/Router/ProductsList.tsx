@@ -206,25 +206,34 @@ export default function ProductsList() {
                             Vender
                           </button>
                           {user?.role === "ADMIN" && (
-                            <>
+                            <div className="flex items-center gap-1">
+                              {/* BOTÓN EDITAR */}
                               <button
                                 onClick={() => {
                                   setEditingId(p.id);
                                   setEditFormData(p);
                                 }}
-                                className="p-2 text-slate-400 hover:text-blue-600"
+                                className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-full 
+                       active:scale-90 transition-all duration-200 group/edit"
+                                title="Editar producto"
                               >
-                                ✏️
+                                <span className="text-lg group-hover/edit:rotate-12 transition-transform inline-block">
+                                  ✏️
+                                </span>
                               </button>
 
+                              {/* BOTÓN ELIMINAR */}
                               <button
                                 onClick={() => handleDelete(p.id)}
-                                className="p-2 text-slate-400 hover:text-rose-600"
-                                title="Eliminar"
+                                className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full 
+                       active:scale-90 transition-all duration-200 group/delete"
+                                title="Eliminar producto"
                               >
-                                🗑️
+                                <span className="text-lg group-hover/delete:shake-animation inline-block">
+                                  🗑️
+                                </span>
                               </button>
-                            </>
+                            </div>
                           )}
                         </>
                       )}
