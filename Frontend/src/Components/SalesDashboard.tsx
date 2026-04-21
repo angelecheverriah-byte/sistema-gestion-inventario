@@ -23,6 +23,8 @@ import {
   FileDown,
 } from "lucide-react";
 
+import { API_URL } from "../Auth/ApiURL";
+
 // Importación del generador de PDF que creamos en Components
 import { exportDailySalesPDF } from "./pdfGenerator";
 
@@ -43,8 +45,6 @@ interface SaleDetail {
   total_bs: number | string;
   hora: string;
 }
-
-const API_URL = "http://localhost:3100/api";
 
 export default function SalesDashboard() {
   // --- ESTADOS ---

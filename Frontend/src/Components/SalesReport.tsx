@@ -15,6 +15,7 @@ import {
   ShoppingBag,
   Loader2,
 } from "lucide-react";
+import { API_URL } from "../Auth/ApiURL";
 
 export default function SalesReport() {
   const [fechaSeleccionada, setFechaSeleccionada] = useState("2026-04");
@@ -30,7 +31,7 @@ export default function SalesReport() {
       setLoading(true);
       // Enviamos la fecha seleccionada completa (YYYY-MM) para que el backend filtre correctamente
       const response = await fetch(
-        `http://localhost:3100/api/reports/sales-stats?month=${fechaSeleccionada}`,
+        `${API_URL}/reports/sales-stats?month=${fechaSeleccionada}`,
       );
 
       if (!response.ok) throw new Error("Error en la respuesta del servidor");
