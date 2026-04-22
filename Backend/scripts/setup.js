@@ -2,27 +2,40 @@ const mysql = require("mysql2/promise");
 require("dotenv").config();
 
 async function setupDatabase() {
-  // Configuración de conexión flexible para Docker
-  const connection = await mysql.createConnection({
+  // Configuración de conexión única (específica para scripts de setup)
+  const connectionConfig = {
     host: process.env.DB_HOST || "mysql-db",
     user: process.env.DB_USER || "user_dev",
     password: process.env.DB_PASSWORD || "password_dev",
-    port: process.env.DB_PORT,
+    port: process.env.DB_PORT || 3306,
+    // Eliminamos connectionLimit y waitForConnections porque son para Pools, no para conexiones directas
     ssl: {
-      rejectUnauthorized: false, // <-- AGREGADO: Necesario para conexiones seguras en la nube
+      rejectUnauthorized: false, // Obligatorio para Aiven
     },
-  });
+    // Aumentamos el tiempo de espera por si el servidor de Aiven está lento
+    connectTimeout: 20000,
+  };
+
+  let connection;
 
   try {
-    console.log("🛠️ Conectando a Aiven e iniciando configuración...");
-    console.log("🛠️ Iniciando configuración profesional...");
+    console.log("🛠️ Intentando conectar a la base de datos...");
+    connection = await mysql.createConnection(connectionConfig);
 
-    await connection.query(
-      `CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`,
+    console.log(
+      "✅ Conexión establecida. Iniciando configuración profesional...",
     );
-    await connection.query(`USE ${process.env.DB_NAME}`);
 
-    // 1. Usuarios (Con Role) - Corregida la coma que faltaba
+    // Si estás en Aiven, la base de datos suele venir pre-creada (defaultdb)
+    // Pero este comando asegura que usemos la que definiste en .env
+    if (process.env.DB_NAME) {
+      await connection.query(
+        `CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`,
+      );
+      await connection.query(`USE ${process.env.DB_NAME}`);
+    }
+
+    // 1. Usuarios (Corregido y con Role)
     await connection.query(`
       CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,7 +46,7 @@ async function setupDatabase() {
       )
     `);
 
-    // 2. Productos (Precio base en USD para estabilidad)
+    // 2. Productos
     await connection.query(`
       CREATE TABLE IF NOT EXISTS productos (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -44,7 +57,7 @@ async function setupDatabase() {
       )
     `);
 
-    // 3. NUEVA: Tabla de Ventas (Para los reportes de Recharts)
+    // 3. Ventas
     await connection.query(`
       CREATE TABLE IF NOT EXISTS ventas (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -54,11 +67,11 @@ async function setupDatabase() {
         tasa_bs DECIMAL(10, 2) NOT NULL,
         total_bs DECIMAL(10, 2) NOT NULL,
         fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (producto_id) REFERENCES productos(id)
+        FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE SET NULL
       )
     `);
 
-    // 4. NUEVA: Tabla de Configuración (Tasa del dólar en Venezuela)
+    // 4. Configuración (Tasa)
     await connection.query(`
       CREATE TABLE IF NOT EXISTS configuracion (
         clave VARCHAR(50) PRIMARY KEY,
@@ -66,13 +79,11 @@ async function setupDatabase() {
       )
     `);
 
-    // INSERTAR TASA INICIAL (Solo si no existe)
     await connection.query(
       "INSERT IGNORE INTO configuracion (clave, valor) VALUES ('tasa_dolar', 36.50)",
     );
 
-    // 5. INSERTAR PRODUCTOS SIN DUPLICAR
-    // Usamos INSERT IGNORE + nombre UNIQUE para que no se repitan
+    // 5. Productos Iniciales
     const productosIniciales = [
       ["Laptop", 1300.5, 10],
       ["Mouse Bluetooth", 47.0, 50],
@@ -91,9 +102,16 @@ async function setupDatabase() {
 
     console.log("🚀 ¡Base de datos lista para el Portafolio!");
   } catch (error) {
-    console.error("❌ Error en setup:", error.message);
+    // Si el error es ENOTFOUND, damos un mensaje más claro
+    if (error.code === "ENOTFOUND") {
+      console.error(
+        "❌ ERROR: No se encontró el host. Revisa que DB_HOST en Render coincida con Aiven.",
+      );
+    } else {
+      console.error("❌ Error en setup:", error.message);
+    }
   } finally {
-    await connection.end();
+    if (connection) await connection.end();
   }
 }
 
