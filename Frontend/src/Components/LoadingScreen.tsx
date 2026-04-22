@@ -27,17 +27,28 @@ export default function LoadingScreen() {
       </div>
 
       {/* Texto y Barra de carga */}
-      <div className="mt-10 text-center space-y-3">
-        <h2 className="text-2xl font-black text-slate-800 tracking-tight">
-          Sistema de Inventario
-        </h2>
+      <div className="mt-10 text-center space-y-4">
+        {/* Contenedor del Logo y Título */}
+        <div className="flex items-center justify-center gap-3">
+          {/* El Badge de "IP" escalado para la pantalla de carga */}
+          <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center shadow-lg shadow-slate-200">
+            <span className="text-white font-black text-base tracking-tighter">
+              IP
+            </span>
+          </div>
+
+          <h2 className="text-3xl font-black text-slate-800 tracking-tight">
+            Inventario<span className="text-blue-500">Pro</span>
+          </h2>
+        </div>
+
         <div className="flex flex-col items-center">
-          <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em]">
+          <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] mt-1">
             Optimizando Recursos
           </p>
 
-          {/* Barra de progreso con animación personalizada de Tailwind v4 */}
-          <div className="w-40 h-1 bg-slate-200 rounded-full mt-6 overflow-hidden">
+          {/* Barra de progreso sutil */}
+          <div className="w-48 h-1.5 bg-slate-200 rounded-full mt-8 overflow-hidden">
             <div className="w-full h-full bg-blue-500 origin-left animate-[loading-bar_2s_infinite_ease-in-out]"></div>
           </div>
         </div>
